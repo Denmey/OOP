@@ -36,24 +36,12 @@ public:
      Array(const Array &A)
      {
           std::cout << "Copy constructor from " << this << " with " << &A << " argument" << std::endl;
-          // try
+          m_size = A.m_size;
+          if (m_size)
           {
-               m_size = A.m_size;
-               if (m_size)
-               {
-                    m_array = new T[m_size];
-                    std::copy(A.m_array, A.m_array+m_size, m_array);
-               }
+               m_array = new T[m_size];
+               std::copy(A.m_array, A.m_array+m_size, m_array);
           }
-          // catch(...)
-          // {
-          //      std::cout << "Got exception in copy constructor from " << this << " with " << &A << " argument" << std::endl;
-          //      m_size = 0;
-          //      if (m_array)
-          //           delete [] m_array;
-          //      m_array=nullptr;
-          //      throw;
-          // }
      }
 
      Array(Array && A)
@@ -112,6 +100,7 @@ public:
      }
      TestClass& operator=(const TestClass& A)
      {
+          std::cout << "Throwing an exception in assignment from element of an array " << std::endl;
           throw 0;
      }
 private:
@@ -145,11 +134,12 @@ int main()
           print(A);
           print(B); // Should print different lines √
           ptr = &B;
+     }
 
-          std::cout << "Testing exception: " << std::endl;
-          Array<TestClass> Aexc(10), Bexc;
-          Bexc = Aexc;
-
+     {
+          std::cout << "Testing exception in assignment operator: " << std::endl;
+          Array<TestClass> A(10), B;
+          B = A;
      }
      print(*ptr); // Should print unknown thing
 
@@ -170,8 +160,6 @@ int main()
           print(A);
           print(B); // Should print different lines √
           ptr = &B;
-
-          // How to test exceptions?
      }
      print(*ptr); // Should print unknown thing
 
