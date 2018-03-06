@@ -46,6 +46,7 @@ public:
 
      Array(Array && A)
      {
+          std::cout << "Move constructor from " << this << " with " << &A << " argument" << std::endl;
           m_size = A.m_size;
           m_array = A.m_array;
           A.m_size = 0;
@@ -139,7 +140,7 @@ int main()
      {
           std::cout << "Testing exception in assignment operator: " << std::endl;
           Array<TestClass> A(10), B;
-          B = A;
+          // B = A;
      }
      print(*ptr); // Should print unknown thing
 
@@ -164,8 +165,19 @@ int main()
      print(*ptr); // Should print unknown thing
 
      // Test for move constructor:
-
-
-    std::cout << "Check!" << std::endl;
+     {
+          std::cout << std::endl << "Testing move constructor: " << std::endl;
+          Array<int> A(10);
+          for (size_t i = 0; i < A.size(); ++i)
+               A[i]=i;
+          std::cout << "A array: ";
+          print(A);
+          Array<int> B(std::move(A));
+          std::cout << "A array after moving A to B: ";
+          print(A);
+          std::cout << "It's empty!" << std::endl;
+          std::cout << "B array: ";
+          print(B);
+     }
     return 0;
 }
