@@ -5,7 +5,7 @@
 class Shape
 {
 public:
-	Shape()
+	Shape() : Pos({0,0,0}), Angle(0), Color({0,0,0})
 	{
 		static int _ID = 0;
 		++_ID;
@@ -23,8 +23,9 @@ public:
 	friend std::ostream& operator<<(std::ostream& ostr, const Shape& s);
 protected:
 	V3d Pos;
-	V3i Color;
 	double Angle;
+	V3i Color;
+
 private:
 	int ID;
 };

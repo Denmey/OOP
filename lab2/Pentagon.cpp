@@ -5,6 +5,7 @@ void Pentagon::print() const
 	std::cout << "Printing pentagon object with ID " << getID() << std::endl;
 	std::cout << "It's position: " << Pos.x << " " << Pos.y << " " << Pos.z << std::endl;
 	std::cout << "It's color: " << Color.x << " " << Color.y << " " << Color.z << " " << std::endl;
+	std::cout << "It's angle: " << Angle << std::endl;
 	std::cout << "It's points relative to the position of figure in polar(first is angle): " << std::endl;
 	std::cout << "(" << A.x << ", "<< R.x << ")" << ", "
 			<< "(" << A.y << ", "<< R.y << ")" << ", "
