@@ -283,7 +283,7 @@ namespace stepik
 			pos.m_node->prev = ptr;
 			return ptr;
 		}
-//TODO
+
 		iterator erase(iterator pos)
 		{
 			// implement this

@@ -144,11 +144,11 @@ namespace stepik
       size_t tmp_size = size() - diff;
       size_t ret_pos = first - m_first;
       Type* tmp = new Type[tmp_size];
-      for (int i = 0; i != ret_pos; ++i)
+      for (size_t i = 0; i != ret_pos; ++i)
       {
         tmp[i] = this->at(i);
       }
-      for (int i = ret_pos+diff; i != size(); ++i)
+      for (size_t i = ret_pos+diff; i != size(); ++i)
       {
         tmp[i-diff] = this->at(i);
       }
@@ -172,18 +172,18 @@ namespace stepik
     {
       // implement this
       size_t in_size = last - first;
-      int int_pos = pos - m_first;
+      size_t int_pos = pos - m_first;
       size_t new_size = size() + in_size;
       Type* tmp = new Type[new_size];
-      for (int i = 0; i < int_pos; ++i)
+      for (size_t i = 0; i < int_pos; ++i)
       {
         tmp[i] = this->at(i);
       }
-      for (int i = int_pos; i < int_pos + in_size; ++i)
+      for (size_t i = int_pos; i < int_pos + in_size; ++i)
       {
         tmp[i] = *(first+i-int_pos);
       }
-      for (int i = int_pos + in_size; i < new_size; ++i)
+      for (size_t i = int_pos + in_size; i < new_size; ++i)
       {
         tmp[i] = this->at(i-in_size);
       }
@@ -262,7 +262,12 @@ namespace stepik
     {
       return m_first == m_last;
     }
-
+    void print()
+    {
+	    for (auto i : *this)
+		    std::cout << i << " ";
+	    std::cout << std::endl;
+    }
   private:
     reference checkIndexAndGet(size_t pos) const
     {
@@ -287,102 +292,77 @@ int main()
 {
 	{
 		stepik::vector<int> a(10);
-		for(int i = 0; i < a.size(); ++i)
+		for(size_t i = 0; i < a.size(); ++i)
 		{
 			a.at(i) = i;
 		}
 
 		stepik::vector<int> b{a}, c{a.begin(), a.end()};
-
-		for (auto i : a)
-			std::cout << i << " ";
-		std::cout << std::endl;
-
-		for (auto i : b)
-			std::cout << i << " ";
-		std::cout << std::endl;
-
-		for (auto i : c)
-			std::cout << i << " ";
-		std::cout << std::endl;
+		std::cout << "First vector: ";
+		a.print();
+		std::cout << "Second(copy constructor): ";
+		b.print();
+		std::cout << "Third(constructor with iterators): ";
+		c.print();
 
 		stepik::vector<int> d;
 		// operator=
+		std::cout << "Assignment operator: ";
 		d = c;
-		for (auto i : d)
-			std::cout << i << " ";
-		std::cout << std::endl;
+		d.print();
 
 		// move operator=
 		b.at(5) = 6;
 		d = std::move(b);
-		for (auto i : d)
-			std::cout << i << " ";
-		std::cout << std::endl;
+		std::cout << "Move assignment operator: ";
+		d.print();
 		d.assign(c.begin(), c.begin()+5);
-		for (auto i : d)
-			std::cout << i << " ";
-		std::cout << std::endl;
+		std::cout << "Assign function: ";
+		d.print();
 	}
 	{
 		stepik::vector<int> a(4);
+		std::cout << "Resizing vector: ";
 		a.resize(10);
+		a.print();
+		std::cout << "Erasing  first element: ";
 		a.erase(a.begin());
-		for (auto i : a)
-			std::cout << i << " ";
-		std::cout << std::endl;
+		a.print();
 	}
   // step3
   {
+    std::cout << "Step3" << std::endl;
     stepik::vector<int> a{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
     std::cout << "Deleting first 3 elements: " << std::endl;
     a.erase(a.begin(), a.begin()+3);
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Deleting last 3 elements: " << std::endl;
     a.erase(a.end()-3, a.end());
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Deleting 2, 3 elements: " << std::endl;
     a.erase(a.begin()+1, a.begin()+3);
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Pushing back 7:" << std::endl;
     a.push_back(7);
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Inesrting in 2 77:" << std::endl;
     stepik::vector<int>::iterator i = a.insert(a.begin()+1,77);
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Returned: " << *i << std::endl;
     std::cout << "Inserting {1, 2, 3} in (end-1):" << std::endl;
     stepik::vector<int> b{1,2,3};
     a.insert(a.end()-1, b.begin(), b.end());
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Inserting {1, 2, 3} in begin:" << std::endl;
     i = a.insert(a.begin(), b.begin(), b.end());
-    for (auto i : a)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    a.print();
     std::cout << "Returned: " << *i << std::endl;
     stepik::vector<int> c(0);
     std::cout << "Printing c:" << std::endl;
-    for (auto i : c)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    c.print();
     std::cout << "Printing c after inserting {1, 2, 3}:" << std::endl;
     i = c.insert(c.end(), b.begin(), b.end());
-    for (auto i : c)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    c.print();
     std::cout << "Returned: " << *i << std::endl;
   }
 	return 0;
