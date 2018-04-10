@@ -283,15 +283,26 @@ namespace stepik
 			pos.m_node->prev = ptr;
 			return ptr;
 		}
-		//TODO
+//TODO
 		iterator erase(iterator pos)
 		{
 			// implement this
-			if (pos.m_node == m_tail) m_tail = m_tail->prev;
-
+			if (pos == m_head)
+			{
+				pop_front();
+				return m_head;
+			}
+			if (pos == m_tail)
+			{
+				pop_back();
+				return m_tail;
+			}
 			node<Type>* tmp = pos.m_node;
 			pos.m_node = pos.m_node->next;
+			pos.m_node->prev = pos.m_node->prev->prev;
+			pos.m_node->prev->next = pos.m_node; // ! m_head
 			delete tmp;
+			return pos;
 		}
 
 		void clear()
@@ -386,5 +397,7 @@ int main()
 	std::cout << "After inserting element before '1': ";
 	a.insert(x, 2);
 	a.print();
-
+	std::cout << "After erasing middle element: ";
+	a.erase(++a.begin());
+	a.print();
 }
