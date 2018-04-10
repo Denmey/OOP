@@ -20,12 +20,94 @@ namespace stepik
   };
 
   template <class Type>
+    class list; //forward declaration
+
+    template <class Type>
+    class list_iterator
+    {
+    public:
+      typedef ptrdiff_t difference_type;
+      typedef Type value_type;
+      typedef Type* pointer;
+      typedef Type& reference;
+      typedef size_t size_type;
+      typedef std::forward_iterator_tag iterator_category;
+
+      list_iterator()
+        : m_node(NULL)
+      {
+      }
+
+      list_iterator(const list_iterator& other)
+        : m_node(other.m_node)
+      {
+      }
+
+      list_iterator& operator = (const list_iterator& other)
+      {
+        // implement this
+	   m_node = other.m_node;
+	   return *this;
+      }
+
+      bool operator == (const list_iterator& other) const
+      {
+        // implement this
+	   return m_node == other.m_node;
+      }
+
+      bool operator != (const list_iterator& other) const
+      {
+        // implement this
+	   return m_node != other.m_node;
+      }
+
+      reference operator * ()
+      {
+        // implement this
+	   return m_node->value;
+      }
+
+      pointer operator -> ()
+      {
+        // implement this
+	   return &(operator*());
+      }
+
+      list_iterator& operator ++ ()
+      {
+        // implement this
+	   m_node = m_node->next;
+	   return *this;
+      }
+
+      list_iterator operator ++ (int)
+      {
+        // implement this
+	   list_iterator tmp{*this};
+	   m_node = m_node->next;
+	   return tmp;
+      }
+
+    private:
+      friend class list<Type>;
+
+      list_iterator(node<Type>* p)
+        : m_node(p)
+      {
+      }
+
+      node<Type>* m_node;
+    };
+
+  template <class Type>
   class list
   {
   public:
     typedef Type value_type;
     typedef value_type& reference;
     typedef const value_type& const_reference;
+    typedef list_iterator<Type> iterator;
 
     list()
       : m_head(nullptr), m_tail(nullptr)
@@ -43,6 +125,16 @@ namespace stepik
       }
       delete p;
     }
+
+	list::iterator begin()
+	{
+		return iterator(m_head);
+	}
+
+	list::iterator end()
+	{
+		return iterator();
+	}
 
     list(const list& other)
     {
@@ -172,7 +264,7 @@ namespace stepik
 		 m_tail->next = nullptr;
 	 }
     }
-
+	
     void clear()
     {
       // implement this
@@ -251,6 +343,10 @@ int main()
   std::cout << "After popping back in first list: ";
   a.pop_back();
   a.print();
+  auto x = a.begin();
+  std::cout << "Dereferencing iterator at first element: " << *(x++) << ", second: " << *x << std::endl;
+  x = a.begin();
+  std::cout << "After assigning iterator to first element: " << *x << std::endl;
   a.clear();
   std::cout << "After clearing list, it's size: " << a.size() << std::endl;
   a.print();
