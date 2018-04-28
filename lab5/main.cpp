@@ -8,6 +8,7 @@
 #define X_MAX 1920 // Максимально возможное значение X положения фигуры
 #define Y_MAX 1080 // Y
 #define R_MAX 100 // Максимальный радиус от цента фигуры до ее вершин
+
 using namespace std;
 
 void generateShapes(stepik::vector<stepik::shared_ptr<Shape>>& SSPVect)
@@ -53,6 +54,19 @@ void generateShapes(stepik::vector<stepik::shared_ptr<Shape>>& SSPVect)
 	}
 }
 
+// First argument is container with shapes, second - predicate
+stepik::shared_ptr<Shape> findFirstOccurence(
+	stepik::vector<stepik::shared_ptr<Shape>>& SSPVect,
+	bool (*predicate)(const Shape&))
+{
+	for (stepik::shared_ptr<Shape> &i : SSPVect)
+	{
+		if (predicate(*i))
+			return i;
+	}
+	return stepik::shared_ptr<Shape>{nullptr};
+}
+
 int main()
 {
 	stepik::vector<stepik::shared_ptr<Shape>> SSPVect(OBJ_N);
@@ -64,5 +78,29 @@ int main()
 		cout << *i << " ";
 	}
 	cout << endl;
+
+	//1.  Поиск первого элемента удовлетворяющего определенному критерию.
+
+	{
+		stepik::shared_ptr<Shape> found{findFirstOccurence(SSPVect,
+			[](const Shape& a)
+			{
+				if (a.getPos().x<100 && a.getPos().y>200) return true;
+				return false;
+			})};
+		if (found)
+			cout << "First element with x<100 and y>200 is " << found.get() << ": "
+				<< endl << *found;
+		else
+		{
+			cout << "Couldn't find element with x<100 and y>200." << endl;
+		}
+	}
+
+	// 12. Отсортировать элементы диапазона так, чтобы правильный элемент находился на n-й позиции
+   //  (все стоящие перед ним элементы не превосходят его, а все стоящие после - превосходят либо равны).
+
+	
+
 	return 0;
 }
