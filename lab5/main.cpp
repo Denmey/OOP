@@ -3,6 +3,7 @@
 #include "shared_ptr.cpp"
 #include <iostream>
 #include <ctime>
+#include <stdexcept>
 
 #define OBJ_N 5 // Количество тестируемых объектов
 #define X_MAX 1920 // Максимально возможное значение X положения фигуры
@@ -70,25 +71,27 @@ stepik::shared_ptr<Shape> findFirstOccurence(
 }
 
 // Function that sorts container(First elements are not matching predicate)
-// First argument is container with shapes, second - predicate function
+// First argument is container with shapes, last - predicate function
 // Returns first element that matching a predicate.
 // If there is no such elements then returns -1
-int sort(stepik::vector<stepik::shared_ptr<Shape>>& SSPVect,
-	bool (*predicate)(const Shape&))
+stepik::shared_ptr<Shape> sort(stepik::vector<stepik::shared_ptr<Shape>>& SSPVect,
+	unsigned begin, unsigned end, bool (*predicate)(const Shape&))
 {
+	if ((begin > SSPVect.size()) || (end > SSPVect.size()) || (end < begin))
+		throw out_of_range("Bad arguments in sort function");
 	// Sorting
-	std::sort(SSPVect.begin(), SSPVect.end(),
+	std::sort(SSPVect.begin()+begin, SSPVect.begin()+end,
 		[predicate](const stepik::shared_ptr<Shape>& lhs,
 			const stepik::shared_ptr<Shape>& rhs) -> bool
 		{
 			return predicate(*lhs)<predicate(*rhs);
 		});
 	// Searching first matching element and returning it's index if found
-	for (unsigned i = 0, size = SSPVect.size(); i < size; ++i)
+	for (unsigned i = begin; i < end; ++i)
 		if (predicate(*SSPVect[i]))
-			return i;
+			return SSPVect[i];
 	// No matching element
-	return -1;
+	return stepik::shared_ptr<Shape>{nullptr};
 }
 
 int main()
@@ -126,7 +129,7 @@ int main()
    //  (все стоящие перед ним элементы не превосходят его, а все стоящие после - превосходят либо равны).
 	// 'True' - figure is in right bottom quarter
 	{
-		int index = sort(SSPVect,
+		auto tmp = sort(SSPVect, 0, SSPVect.size(),
 			[](const Shape& a)
 			{
 				if (a.getPos().x>(X_MAX/2) && a.getPos().y>(Y_MAX/2)) return true;
@@ -139,9 +142,9 @@ int main()
 			cout << *i << " ";
 		}
 		cout << endl;
-		if (index>=0)
-			cout << "Index of first element matching predicate: " << index
-				<< endl << *(SSPVect[index]);
+		if (tmp)
+			cout << "First element matching predicate: " << tmp.get()
+				<< endl << *(tmp);
 		else
 			cout << "No elements matching a predicate." << endl;
 	}
