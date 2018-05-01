@@ -5,7 +5,7 @@ all: dir $(BLDPATH)/Shape.o $(BLDPATH)/Circle.o $(BLDPATH)/Pentagon.o $(BLDPATH)
 	g++ $(BLDPATH)/*.o -o $(BLDPATH)/out $(CMPKEYS)
 dir:
 	mkdir -p $(BLDPATH)
-$(BLDPATH)/main.o: main.cpp $(BLDPATH)/*.o
+$(BLDPATH)/main.o: main.cpp $(BLDPATH)/Shape.o $(BLDPATH)/Circle.o $(BLDPATH)/Pentagon.o $(BLDPATH)/RegPentagon.o $(BLDPATH)/shared_ptr.o $(BLDPATH)/vector.o
 	g++ main.cpp -c -o $(BLDPATH)/main.o $(CMPKEYS)
 $(BLDPATH)/Shape.o: Shape.cpp Shape.hpp Vectors.hpp
 	g++ Shape.cpp -c -o $(BLDPATH)/Shape.o $(CMPKEYS)
