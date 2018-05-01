@@ -109,15 +109,15 @@ int main()
 		stepik::shared_ptr<Shape> found{findFirstOccurence(SSPVect,
 			[](const Shape& a)
 			{
-				if (a.getPos().x<100 && a.getPos().y>200) return true;
+				if (a.getPos().x<500 && a.getPos().y>500) return true;
 				return false;
 			})};
 		if (found)
-			cout << "First element with x<100 and y>200 is " << found.get() << ": "
+			cout << "First element with x<500 and y>500 is " << found.get() << ": "
 				<< endl << *found;
 		else
 		{
-			cout << "Couldn't find element with x<100 and y>200." << endl;
+			cout << "Couldn't find element with x<500 and y>500." << endl;
 		}
 	}
 	cout << endl;
